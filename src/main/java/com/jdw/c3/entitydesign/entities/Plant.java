@@ -9,12 +9,18 @@ import com.jdw.c3.entitydesign.pojos.Views;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-
+import jakarta.persistence.NamedQuery;
+@NamedQuery(
+    name = "plantDelivered",
+    query = "SELECT p.delivery.completed FROM Plant p WHERE id = :id"
+)
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
 public class Plant {
@@ -30,8 +36,8 @@ public class Plant {
     @Column(precision = 12, scale = 4)
     private BigDecimal price;
 
-    @ManyToOne
-    @Column(name = "delivery_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "delivery_id")
     private Delivery delivery;
 
     public Plant() {

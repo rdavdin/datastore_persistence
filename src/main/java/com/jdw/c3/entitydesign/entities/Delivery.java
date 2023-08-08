@@ -6,36 +6,48 @@ import java.util.List;
 import org.hibernate.annotations.Nationalized;
 import org.hibernate.type.YesNoConverter;
 
+import com.fasterxml.jackson.annotation.JsonView;
+import com.jdw.c3.entitydesign.pojos.Views;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.NamedQuery;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-
+@NamedQuery(
+    name = "Delivery.getAllDeliveryByName",
+    query = "SELECT d FROM Delivery d WHERE d.recipientName = :recipientName"
+)
 @Entity
 @Table(name="deliveries")
 public class Delivery {
+    @JsonView(Views.Public.class)
     @Id
     @GeneratedValue
     private Long id;
 
+    @JsonView(Views.Public.class)
     @Nationalized
     private String recipientName;
 
+    @JsonView(Views.Public.class)
     @Column(name="address_full", length=500)
     private String address;
 
     private LocalDateTime deliveryTime;
 
+    @JsonView(Views.Public.class)
     @Convert(converter = YesNoConverter.class)
-    private Boolean isDone;
+    private Boolean completed = false;
 
     //make sure to specify mappedBy. Lazy fetch optional,
    //  but often a good idea for collection attributes
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "delivery")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "delivery", cascade = CascadeType.ALL)
     private List<Plant> plants;
 
     public Delivery(){}
@@ -64,12 +76,12 @@ public class Delivery {
         this.address = address;
     }
 
-    public Boolean getIsDone() {
-        return isDone;
+    public Boolean getCompleted() {
+        return completed;
     }
 
-    public void setIsDone(Boolean isDone) {
-        this.isDone = isDone;
+    public void setCompleted(Boolean isCompleted) {
+        this.completed = isCompleted;
     }
 
     public LocalDateTime getDeliveryTime() {

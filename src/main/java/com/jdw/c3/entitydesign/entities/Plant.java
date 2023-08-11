@@ -18,7 +18,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.NamedQuery;
 @NamedQuery(
-    name = "plantDelivered",
+    name = "Plant.plantDelivered",
     query = "SELECT p.delivery.completed FROM Plant p WHERE id = :id"
 )
 @Entity
@@ -41,6 +41,11 @@ public class Plant {
     private Delivery delivery;
 
     public Plant() {
+    }
+
+    public Plant(String name, BigDecimal price) {
+        this.name = name;
+        this.price = price;
     }
 
     public Long getId() {

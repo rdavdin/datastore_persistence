@@ -18,13 +18,11 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
 @NamedQuery(
     name = "Delivery.getAllDeliveryByName",
     query = "SELECT d FROM Delivery d WHERE d.recipientName = :recipientName"
 )
 @Entity
-@Table(name="deliveries")
 public class Delivery {
     @JsonView(Views.Public.class)
     @Id
@@ -51,6 +49,17 @@ public class Delivery {
     private List<Plant> plants;
 
     public Delivery(){}
+
+    
+
+    public Delivery(String recipientName, String address, LocalDateTime deliveryTime, Boolean completed) {
+        this.recipientName = recipientName;
+        this.address = address;
+        this.deliveryTime = deliveryTime;
+        this.completed = completed;
+    }
+
+
 
     public Long getId() {
         return id;
